@@ -56,3 +56,18 @@ Frontend runs on `http://localhost:5173`.
 -   **Shared Auth**: Create a user once to play both games.
 -   **Unified Dashboard**: Select your game from a sleek, arcade-style home screen.
 -   **Responsive Design**: optimized for both desktop and mobile play.
+
+## 🔒 Security
+
+This project includes built-in security scanning using [Trivy](https://aquasecurity.github.io/trivy/).
+
+To scan the built Docker images:
+```bash
+make scan-backend
+make scan-frontend
+```
+
+To scan the source code/filesystem:
+```bash
+make scan-fs
+```

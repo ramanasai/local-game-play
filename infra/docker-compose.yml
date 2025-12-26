@@ -1,0 +1,37 @@
+services:
+  backend:
+    image: backend_shared
+    # ports:
+    #   - "8080:8080"
+    expose:
+      - "8080"
+    volumes:
+      - backend_data:/app/data
+    restart: unless-stopped
+    environment:
+      - CORS_ORIGIN=http://localhost:8080
+    networks:
+      - backend
+      - frontend
+
+  frontend:
+    image: frontend_shared
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - frontend
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
+  frontend:
+    name: frontend
+    driver: bridge
+
+volumes:
+  backend_data:
+    name: backend_data
