@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tictactoe-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - tictactoe-data:/app/data
+    environment:
+      - PORT=8080
+      - DB_PATH=/app/data/tictactoe.db
+      - CORS_ORIGIN=http://localhost:3000
+    networks:
+      - tictactoe-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: tictactoe-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_BASE=http://localhost:8080/api/v1
+    networks:
+      - tictactoe-net
+    restart: unless-stopped
+
+volumes:
+  tictactoe-data:
+
+
+networks:
+  tictactoe-net:
+    driver: bridge
