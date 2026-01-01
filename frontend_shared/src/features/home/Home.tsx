@@ -69,10 +69,25 @@ const Home = () => {
                     </div>
                 </motion.div>
 
-                {/* Filler Cells for Grid Texture */}
-                <GridCell className="h-64 sm:h-auto hidden lg:flex items-center justify-center">
-                    <span className="font-mono text-9xl font-black opacity-5 select-none hover:opacity-10 transition-opacity">03</span>
-                </GridCell>
+                {/* 2048 Game Card */}
+                <motion.div
+                    whileHover={{ backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }}
+                    className="col-span-1 border-r border-b border-border p-8 py-12 flex flex-col justify-between cursor-pointer group transition-colors duration-300"
+                    onClick={() => navigate('/2048')}
+                >
+                    <div className="flex justify-between items-start mb-12">
+                        <span className="font-mono text-xs font-bold text-destructive tracking-widest">MODULE_03</span>
+                        <ArrowRight className="opacity-0 group-hover:opacity-100 transition-opacity -rotate-45 group-hover:rotate-0 transform duration-300" />
+                    </div>
+                    <div>
+                        <div className="flex gap-1 mb-6 opacity-50 group-hover:opacity-100 transition-opacity">
+                            <div className="w-16 h-16 bg-yellow-500 rounded-lg flex items-center justify-center text-background font-bold text-2xl">20</div>
+                            <div className="w-16 h-16 bg-yellow-400 rounded-lg flex items-center justify-center text-background font-bold text-2xl -ml-8 mt-4 shadow-lg">48</div>
+                        </div>
+                        <h2 className="text-3xl font-bold uppercase mb-2 text-foreground">2048</h2>
+                        <p className="text-sm text-muted-foreground font-mono">Logic • Strategy</p>
+                    </div>
+                </motion.div>
                 <GridCell className="h-64 sm:h-auto hidden lg:flex items-center justify-center">
                     <span className="font-mono text-9xl font-black opacity-5 select-none hover:opacity-10 transition-opacity">04</span>
                 </GridCell>

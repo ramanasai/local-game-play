@@ -4,7 +4,6 @@
 - Flappy Bird – Tap to keep a bird airborne while passing through gaps between obstacles. Core mechanics rely on gravity, collision detection, and score tracking.
 - Breakout – Move a paddle to bounce a ball and break bricks at the top of the screen. Focuses on simple physics, collisions, and level progression.
 - Whack-a-Mole – Random targets appear and the player taps them before they disappear. Easy to implement using timers, random positioning, and scoring.
-- 2048 – Slide numbered tiles on a grid to combine matching values and reach a target number. Logic-driven gameplay with simple controls and clear rules.
 - Pong – Two paddles hit a ball back and forth across the screen, trying to score by getting it past the opponent. Very simple physics, collision detection, and score keeping.
 - Doodle Jump – A character automatically jumps upward while the player controls horizontal movement to land on platforms. Focuses on gravity, scrolling levels, and basic collisions.
 - Crossy Road – Move a character forward across roads and rivers while avoiding obstacles. Built around grid movement, obstacle spawning, and endless scoring.

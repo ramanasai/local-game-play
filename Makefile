@@ -16,7 +16,7 @@ dev-backend:
 
 # Run the Frontend in development mode
 dev-frontend:
-	cd frontend_shared && bun run dev
+	cd frontend_shared && bun run dev --host
 
 # Build both services
 build:

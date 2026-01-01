@@ -60,3 +60,15 @@ export const getTicTacToeStats = async () => {
 export const getTicTacToeLeaderboard = async (limit = 10) => {
     return api<any[]>(`/leaderboard/tictactoe?limit=${limit}`);
 };
+
+// 2048
+export const submit2048Score = async (score: number) => {
+    return api("/2048/scores", {
+        method: "POST",
+        body: JSON.stringify({ score })
+    });
+};
+
+export const get2048Leaderboard = async (limit = 10) => {
+    return api<any[]>(`/leaderboard/2048?limit=${limit}`);
+};

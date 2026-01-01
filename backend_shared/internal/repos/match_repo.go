@@ -87,7 +87,7 @@ func (r *MatchRepo) GetLeaderboard(limit int) ([]TTTLeaderboardEntry, error) {
 	}
 	defer rows.Close()
 
-	var leaderboard []TTTLeaderboardEntry
+	leaderboard := []TTTLeaderboardEntry{}
 	for rows.Next() {
 		var entry TTTLeaderboardEntry
 		if err := rows.Scan(&entry.UserID, &entry.Username, &entry.Wins); err != nil {

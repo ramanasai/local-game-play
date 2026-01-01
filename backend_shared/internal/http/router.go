@@ -9,7 +9,7 @@ import (
 	authMw "github.com/ramanasai/local-game-play/internal/http/middleware"
 )
 
-func NewRouter(cfg *config.Config, userHandler *handlers.UserHandler, memHandler *handlers.MemoryHandler, tttHandler *handlers.TicTacToeHandler, auth *authMw.AuthMiddleware) *chi.Mux {
+func NewRouter(cfg *config.Config, userHandler *handlers.UserHandler, memHandler *handlers.MemoryHandler, tttHandler *handlers.TicTacToeHandler, game2048Handler *handlers.Game2048Handler, auth *authMw.AuthMiddleware) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -29,6 +29,7 @@ func NewRouter(cfg *config.Config, userHandler *handlers.UserHandler, memHandler
 		r.Post("/users", userHandler.Login) // This is login/create
 		r.Get("/leaderboard", memHandler.GetLeaderboard)
 		r.Get("/leaderboard/tictactoe", tttHandler.GetLeaderboard)
+		r.Get("/leaderboard/2048", game2048Handler.GetLeaderboard)
 		r.Post("/play", tttHandler.GetMove) // Minimax
 
 		// Protected Routes
@@ -42,6 +43,9 @@ func NewRouter(cfg *config.Config, userHandler *handlers.UserHandler, memHandler
 			// TicTacToe
 			r.Post("/matches", tttHandler.SaveMatch)
 			r.Get("/stats", tttHandler.GetStats)
+
+			// 2048
+			r.Post("/2048/scores", game2048Handler.SubmitScore)
 		})
 	})
 

@@ -5,6 +5,7 @@ import Login from './features/auth/Login';
 import Home from './features/home/Home';
 import MemoryGame from './features/memory/Game.tsx'; // Game component
 import TicTacToeGame from './features/tictactoe/Game.tsx';
+import Game2048 from './features/game2048/Game.tsx';
 import { ThemeProvider } from './components/theme-provider';
 import Layout from './components/Layout';
 import Leaderboard from './features/leaderboard/Leaderboard';
@@ -34,6 +35,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/memory" element={<MemoryGame />} />
               <Route path="/tictactoe" element={<TicTacToeGame />} />
+              <Route path="/2048" element={<Game2048 />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Route>
           </Routes>

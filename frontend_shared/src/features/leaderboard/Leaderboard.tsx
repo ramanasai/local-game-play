@@ -1,27 +1,30 @@
 import { useEffect, useState } from 'react';
-import { getMemoryLeaderboard, getTicTacToeLeaderboard } from '../../lib/api';
+import { getMemoryLeaderboard, getTicTacToeLeaderboard, get2048Leaderboard } from '../../lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Brain, Grid3x3, Medal } from 'lucide-react';
+import { Trophy, Brain, Grid3x3, Medal, Layers } from 'lucide-react';
 import { cn } from '../../lib/utils'; // Assuming this exists
 
-type LeaderboardTab = 'memory' | 'tictactoe';
+type LeaderboardTab = 'memory' | 'tictactoe' | '2048';
 
 const Leaderboard = () => {
     const [activeTab, setActiveTab] = useState<LeaderboardTab>('memory');
     const [memoryScores, setMemoryScores] = useState<any[]>([]);
     const [tttScores, setTttScores] = useState<any[]>([]);
+    const [scores2048, setScores2048] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const [memData, tttData] = await Promise.all([
+                const [memData, tttData, data2048] = await Promise.all([
                     getMemoryLeaderboard(),
-                    getTicTacToeLeaderboard()
+                    getTicTacToeLeaderboard(),
+                    get2048Leaderboard()
                 ]);
-                setMemoryScores(memData || []); // Handle potential nulls
+                setMemoryScores(memData || []);
                 setTttScores(tttData || []);
+                setScores2048(data2048 || []);
             } catch (err) {
                 console.error("Failed to fetch leaderboards", err);
             } finally {
@@ -48,7 +51,7 @@ const Leaderboard = () => {
             </div>
 
             {/* Tabs */}
-            <div className="flex p-1 bg-muted/50 rounded-xl mb-8 border border-border">
+            <div className="flex p-1 bg-muted/50 rounded-xl mb-8 border border-border flex-wrap justify-center gap-2">
                 <button
                     onClick={() => setActiveTab('memory')}
                     className={cn(
@@ -73,6 +76,18 @@ const Leaderboard = () => {
                     <Grid3x3 size={18} />
                     TIC-TAC-TOE
                 </button>
+                <button
+                    onClick={() => setActiveTab('2048')}
+                    className={cn(
+                        "flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-bold transition-all",
+                        activeTab === '2048'
+                            ? "bg-background text-foreground shadow-sm scale-105"
+                            : "text-muted-foreground hover:text-foreground"
+                    )}
+                >
+                    <Layers size={18} />
+                    2048
+                </button>
             </div>
 
             {/* Content */}
@@ -81,7 +96,7 @@ const Leaderboard = () => {
                     <div className="col-span-2 text-center">Rank</div>
                     <div className="col-span-6">Player</div>
                     <div className="col-span-4 text-right">
-                        {activeTab === 'memory' ? 'Time (Moves)' : 'Wins (Hard)'}
+                        {activeTab === 'memory' ? 'Time (Moves)' : activeTab === 'tictactoe' ? 'Wins (Hard)' : 'Score'}
                     </div>
                 </div>
 
@@ -111,13 +126,13 @@ const Leaderboard = () => {
                                         </motion.div>
                                     ))
                                 )
-                            ) : (
+                            ) : activeTab === 'tictactoe' ? (
                                 tttScores.length === 0 ? (
                                     <div className="p-8 text-center text-muted-foreground">No champions yet. Defeat the AI!</div>
                                 ) : (
                                     tttScores.map((score, i) => (
                                         <motion.div
-                                            key={score.user_id} // ttt leaderboard uses user_id as key
+                                            key={score.user_id}
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: i * 0.05 }}
@@ -127,6 +142,26 @@ const Leaderboard = () => {
                                             <div className="col-span-6 font-bold truncate pr-4">{score.username}</div>
                                             <div className="col-span-4 text-right font-mono text-lg text-primary">
                                                 {score.wins} Wins
+                                            </div>
+                                        </motion.div>
+                                    ))
+                                )
+                            ) : (
+                                scores2048.length === 0 ? (
+                                    <div className="p-8 text-center text-muted-foreground">No high scores yet. Start merging!</div>
+                                ) : (
+                                    scores2048.map((score, i) => (
+                                        <motion.div
+                                            key={score.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: i * 0.05 }}
+                                            className="grid grid-cols-12 p-4 items-center hover:bg-muted/30 transition-colors"
+                                        >
+                                            <div className="col-span-2 flex justify-center">{renderMedal(i)}</div>
+                                            <div className="col-span-6 font-bold truncate pr-4">{score.username}</div>
+                                            <div className="col-span-4 text-right font-mono text-lg text-yellow-500 font-bold">
+                                                {score.score}
                                             </div>
                                         </motion.div>
                                     ))
