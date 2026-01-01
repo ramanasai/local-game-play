@@ -8,6 +8,7 @@ import (
 	"github.com/ramanasai/local-game-play/config"
 	"github.com/ramanasai/local-game-play/internal/auth"
 	"github.com/ramanasai/local-game-play/internal/db"
+	"github.com/ramanasai/local-game-play/internal/games/blockblast"
 	"github.com/ramanasai/local-game-play/internal/games/game2048"
 	"github.com/ramanasai/local-game-play/internal/games/memory"
 	"github.com/ramanasai/local-game-play/internal/games/tictactoe"
@@ -43,12 +44,14 @@ func main() {
 	scoreRepo := repos.NewScoreRepo(database)
 	matchRepo := repos.NewMatchRepo(database)
 	game2048Repo := repos.NewGame2048Repo(database)
+	blockBlastRepo := repos.NewBlockBlastRepo(database)
 
 	// Services
 	authService := auth.NewAuthService(userRepo, sessionRepo)
 	memService := memory.NewService(scoreRepo)
 	tttService := tictactoe.NewService(matchRepo)
 	game2048Service := game2048.NewService(game2048Repo)
+	blockBlastService := blockblast.NewService(blockBlastRepo)
 
 	// Middleware
 	authMw := middleware.NewAuthMiddleware(authService)
@@ -58,9 +61,10 @@ func main() {
 	memHandler := handlers.NewMemoryHandler(memService)
 	tttHandler := handlers.NewTicTacToeHandler(tttService)
 	game2048Handler := handlers.NewGame2048Handler(game2048Service)
+	blockBlastHandler := handlers.NewBlockBlastHandler(blockBlastService)
 
 	// Router
-	r := internalHttp.NewRouter(cfg, userHandler, memHandler, tttHandler, game2048Handler, authMw)
+	r := internalHttp.NewRouter(cfg, userHandler, memHandler, tttHandler, game2048Handler, blockBlastHandler, authMw)
 
 	log.Printf("Server starting on port %s", cfg.Port)
 	if err := http.ListenAndServe(":"+cfg.Port, r); err != nil {

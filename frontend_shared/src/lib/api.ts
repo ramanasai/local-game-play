@@ -72,3 +72,15 @@ export const submit2048Score = async (score: number) => {
 export const get2048Leaderboard = async (limit = 10) => {
     return api<any[]>(`/leaderboard/2048?limit=${limit}`);
 };
+
+// Block Blast
+export const submitBlockBlastScore = async (score: number) => {
+    return api("/blockblast/scores", {
+        method: "POST",
+        body: JSON.stringify({ score })
+    });
+};
+
+export const getLeaderboardBlockBlast = async (limit = 10) => {
+    return api<any[]>(`/leaderboard/blockblast?limit=${limit}`);
+};

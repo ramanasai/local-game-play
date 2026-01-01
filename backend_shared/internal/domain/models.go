@@ -35,6 +35,14 @@ type Score2048 struct {
 	Username  string    `json:"username,omitempty"`
 }
 
+type ScoreBlockBlast struct {
+	ID        string    `json:"id"`
+	UserID    string    `json:"user_id"`
+	Score     int       `json:"score"`
+	CreatedAt time.Time `json:"created_at"`
+	Username  string    `json:"username,omitempty"`
+}
+
 type Match struct {
 	ID         string    `json:"id"`
 	UserID     string    `json:"user_id"`

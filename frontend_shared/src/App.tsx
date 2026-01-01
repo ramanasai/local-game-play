@@ -6,9 +6,11 @@ import Home from './features/home/Home';
 import MemoryGame from './features/memory/Game.tsx'; // Game component
 import TicTacToeGame from './features/tictactoe/Game.tsx';
 import Game2048 from './features/game2048/Game.tsx';
+import BlockBlastGame from './features/blockblast/Game.tsx';
 import { ThemeProvider } from './components/theme-provider';
 import Layout from './components/Layout';
 import Leaderboard from './features/leaderboard/Leaderboard';
+import ScrollToTop from './components/ScrollToTop';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -28,6 +30,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <BrowserRouter>
+        <ScrollToTop />
         <div className="min-h-screen bg-background text-foreground font-sans antialiased">
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -36,6 +39,7 @@ function App() {
               <Route path="/memory" element={<MemoryGame />} />
               <Route path="/tictactoe" element={<TicTacToeGame />} />
               <Route path="/2048" element={<Game2048 />} />
+              <Route path="/blockblast" element={<BlockBlastGame />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Route>
           </Routes>

@@ -8,33 +8,47 @@ import { RefreshCw, Trophy } from 'lucide-react';
 const CardComponent = ({ card, onClick }: { card: any, onClick: () => void }) => (
     <motion.div
         className={cn(
-            "aspect-square relative cursor-pointer perspective-1000",
+            "aspect-square relative cursor-pointer",
             (card.isFlipped || card.isMatched) ? "pointer-events-none" : ""
         )}
+        style={{ perspective: '1000px' }}
         onClick={onClick}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
     >
         <motion.div
             className={cn(
-                "w-full h-full transition-all duration-300 transform-style-3d relative rounded-xl shadow-lg",
-                (card.isFlipped || card.isMatched) ? "rotate-y-180" : ""
+                "w-full h-full transition-all duration-300 relative rounded-xl shadow-lg",
+                // Use classes for rotation state, but styles for 3d properties
             )}
-            style={{ transformStyle: 'preserve-3d' }}
+            style={{
+                transformStyle: 'preserve-3d',
+                WebkitTransformStyle: 'preserve-3d',
+                transform: (card.isFlipped || card.isMatched) ? 'rotateY(180deg)' : 'rotateY(0deg)'
+            }}
+            initial={false}
             animate={{ rotateY: (card.isFlipped || card.isMatched) ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
         >
-            {/* Front (Back of card design) */}
-            <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-primary to-accent rounded-xl border-2 border-primary/20 flex items-center justify-center">
+            {/* Front (Back of card design) - Visible when NOT flipped (0deg) */}
+            <div
+                className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-xl border-2 border-primary/20 flex items-center justify-center backface-hidden"
+                style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+            >
                 <span className="text-2xl opacity-20">?</span>
             </div>
 
-            {/* Back (Emoji) */}
+            {/* Back (Emoji) - Visible when FLIPPED (180deg) */}
             <div
                 className={cn(
-                    "absolute w-full h-full backface-hidden bg-card rounded-xl border-2 border-primary flex items-center justify-center text-4xl",
+                    "absolute inset-0 bg-card rounded-xl border-2 border-primary flex items-center justify-center text-4xl backface-hidden",
                     card.isMatched ? "bg-green-500/10 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]" : ""
                 )}
-                style={{ transform: 'rotateY(180deg)' }}
+                style={{
+                    transform: 'rotateY(180deg)',
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden'
+                }}
             >
                 {card.value}
             </div>

@@ -88,8 +88,34 @@ const Home = () => {
                         <p className="text-sm text-muted-foreground font-mono">Logic • Strategy</p>
                     </div>
                 </motion.div>
+                {/* Block Blast Card */}
+                <motion.div
+                    whileHover={{ backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }}
+                    className="col-span-1 border-r border-b border-border p-8 py-12 flex flex-col justify-between cursor-pointer group transition-colors duration-300"
+                    onClick={() => navigate('/blockblast')}
+                >
+                    <div className="flex justify-between items-start mb-12">
+                        <span className="font-mono text-xs font-bold text-destructive tracking-widest">MODULE_04</span>
+                        <ArrowRight className="opacity-0 group-hover:opacity-100 transition-opacity -rotate-45 group-hover:rotate-0 transform duration-300" />
+                    </div>
+                    <div>
+                        <div className="grid grid-cols-4 gap-1 w-20 mb-6 opacity-50 group-hover:opacity-100 transition-opacity">
+                            <div className="w-4 h-4 bg-red-500 rounded-sm"></div>
+                            <div className="w-4 h-4 bg-blue-500 rounded-sm"></div>
+                            <div className="w-4 h-4 bg-green-500 rounded-sm"></div>
+                            <div className="w-4 h-4 bg-yellow-500 rounded-sm"></div>
+                            <div className="w-4 h-4 bg-purple-500 rounded-sm"></div>
+                            <div className="w-4 h-4 bg-pink-500 rounded-sm"></div>
+                            <div className="w-4 h-4 bg-orange-500 rounded-sm"></div>
+                            <div className="w-4 h-4 bg-cyan-500 rounded-sm"></div>
+                        </div>
+                        <h2 className="text-3xl font-bold uppercase mb-2 text-foreground">Block Blast</h2>
+                        <p className="text-sm text-muted-foreground font-mono">Puzzle • Strategy</p>
+                    </div>
+                </motion.div>
+
                 <GridCell className="h-64 sm:h-auto hidden lg:flex items-center justify-center">
-                    <span className="font-mono text-9xl font-black opacity-5 select-none hover:opacity-10 transition-opacity">04</span>
+                    <span className="font-mono text-9xl font-black opacity-5 select-none hover:opacity-10 transition-opacity">05</span>
                 </GridCell>
                 <div className="hidden lg:block col-span-2 border-r border-b border-border p-8">
                     <div className="h-full w-full border border-dashed border-border flex items-center justify-center">
@@ -97,7 +123,7 @@ const Home = () => {
                     </div>
                 </div>
 
-            </main>
+            </main >
 
             <footer className="border-t border-border bg-card text-card-foreground py-12">
                 <div className="container mx-auto max-w-7xl px-6 flex justify-between items-end">
@@ -112,7 +138,7 @@ const Home = () => {
                     </span>
                 </div>
             </footer>
-        </div>
+        </div >
     );
 };
 
