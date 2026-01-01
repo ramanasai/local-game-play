@@ -5,6 +5,9 @@ import Login from './features/auth/Login';
 import Home from './features/home/Home';
 import MemoryGame from './features/memory/Game.tsx'; // Game component
 import TicTacToeGame from './features/tictactoe/Game.tsx';
+import { ThemeProvider } from './components/theme-provider';
+import Layout from './components/Layout';
+import Leaderboard from './features/leaderboard/Leaderboard';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -22,37 +25,21 @@ function App() {
   }, [checkAuth]);
 
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-background text-foreground font-sans antialiased">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/memory"
-            element={
-              <ProtectedRoute>
-                <MemoryGame />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/tictactoe"
-            element={
-              <ProtectedRoute>
-                <TicTacToeGame />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <BrowserRouter>
+        <div className="min-h-screen bg-background text-foreground font-sans antialiased">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+              <Route path="/" element={<Home />} />
+              <Route path="/memory" element={<MemoryGame />} />
+              <Route path="/tictactoe" element={<TicTacToeGame />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+            </Route>
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

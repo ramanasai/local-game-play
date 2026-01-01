@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useMemoryStore, type GridSize } from './store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../lib/utils';
-import { ArrowLeft, RefreshCw, Trophy } from 'lucide-react';
+import { RefreshCw, Trophy } from 'lucide-react';
 
 const CardComponent = ({ card, onClick }: { card: any, onClick: () => void }) => (
     <motion.div
@@ -74,25 +74,18 @@ const MemoryGame = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center bg-background text-foreground p-4">
-            {/* Header */}
-            <div className="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between mb-6 md:mb-8 gap-4">
-                <div className="w-full md:w-auto flex justify-between md:justify-start items-center">
-                    <Link to="/" className="flex items-center gap-2 hover:text-primary transition-colors">
-                        <ArrowLeft size={24} />
-                        <span className="font-bold">Back</span>
-                    </Link>
-
-                    {/* Mobile Stats (Only visible on small screens to save space) */}
-                    <div className="flex md:hidden items-center gap-3 text-sm">
-                        <div className="flex flex-col items-end">
-                            <span className="text-[10px] text-muted-foreground uppercase">Moves</span>
-                            <span className="font-mono font-bold leading-none">{moves}</span>
-                        </div>
-                        <div className="h-6 w-px bg-border"></div>
-                        <div className="flex flex-col items-end">
-                            <span className="text-[10px] text-muted-foreground uppercase">Time</span>
-                            <span className="font-mono font-bold leading-none">{timer}s</span>
-                        </div>
+            {/* Header (Replaced by Layout) */}
+            <div className="w-full max-w-4xl flex items-center justify-between mb-6 md:mb-8 gap-4">
+                {/* Mobile Stats (Only visible on small screens to save space) */}
+                <div className="flex md:hidden items-center gap-3 text-sm">
+                    <div className="flex flex-col items-end">
+                        <span className="text-[10px] text-muted-foreground uppercase">Moves</span>
+                        <span className="font-mono font-bold leading-none">{moves}</span>
+                    </div>
+                    <div className="h-6 w-px bg-border"></div>
+                    <div className="flex flex-col items-end">
+                        <span className="text-[10px] text-muted-foreground uppercase">Time</span>
+                        <span className="font-mono font-bold leading-none">{timer}s</span>
                     </div>
                 </div>
 
@@ -108,14 +101,14 @@ const MemoryGame = () => {
                     </div>
                 </div>
 
-                <div className="w-full md:w-auto flex items-center justify-between gap-2 bg-card md:bg-transparent p-2 md:p-0 rounded-lg border md:border-none border-border">
+                <div className="flex items-center justify-between gap-2 bg-card md:bg-transparent p-2 md:p-0 rounded-lg border md:border-none border-border ml-auto">
                     <select
                         value={gridSize}
                         onChange={(e) => {
                             setGridSize(e.target.value as GridSize);
                             resetGame();
                         }}
-                        className="bg-transparent md:bg-card border-none md:border md:border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none w-full md:w-auto"
+                        className="bg-transparent md:bg-card border-none md:border md:border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
                     >
                         <option value="4x3">4x3 (Easy)</option>
                         <option value="4x4">4x4 (Medium)</option>

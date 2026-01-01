@@ -1,0 +1,15 @@
+- Pac-Man – Navigate a maze, eat all pellets, and avoid ghosts while using power pellets to temporarily turn the tables. Focuses on quick reflexes, pattern learning, and score chasing.
+- Block Blast – Drag and place blocks on a grid to complete rows or columns and clear space. Gameplay is relaxed but strategic, emphasizing planning ahead and maximizing combos.
+- Snake – Control a growing snake that moves continuously and eats food while avoiding walls and itself. Simple grid-based logic with increasing difficulty over time.
+- Flappy Bird – Tap to keep a bird airborne while passing through gaps between obstacles. Core mechanics rely on gravity, collision detection, and score tracking.
+- Breakout – Move a paddle to bounce a ball and break bricks at the top of the screen. Focuses on simple physics, collisions, and level progression.
+- Whack-a-Mole – Random targets appear and the player taps them before they disappear. Easy to implement using timers, random positioning, and scoring.
+- 2048 – Slide numbered tiles on a grid to combine matching values and reach a target number. Logic-driven gameplay with simple controls and clear rules.
+- Pong – Two paddles hit a ball back and forth across the screen, trying to score by getting it past the opponent. Very simple physics, collision detection, and score keeping.
+- Doodle Jump – A character automatically jumps upward while the player controls horizontal movement to land on platforms. Focuses on gravity, scrolling levels, and basic collisions.
+- Crossy Road – Move a character forward across roads and rivers while avoiding obstacles. Built around grid movement, obstacle spawning, and endless scoring.
+- Simon Says – The game shows a sequence of colors or sounds that the player must repeat correctly. Relies on arrays, timing, and input validation.
+- Tap the Circle – Circles appear randomly on the screen and must be tapped quickly before disappearing. Simple random positioning, timers, and score tracking.
+- Endless Runner – A character runs automatically while the player jumps or dodges obstacles. Core mechanics include obstacle spawning, collision detection, and increasing speed.
+- Falling Blocks – Blocks fall from the top and the player moves them to avoid collisions or stack them safely. Uses gravity, input handling, and basic game-over logic.
+- Guess the Number – The player guesses a random number with hints like higher or lower. Requires only random number generation and input handling.

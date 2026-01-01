@@ -29,6 +29,10 @@ func (s *Service) GetStats(userID string) (map[string]domain.StatsSummary, error
 	return s.matchRepo.GetStatsByUser(userID)
 }
 
+func (s *Service) GetLeaderboard(limit int) ([]repos.TTTLeaderboardEntry, error) {
+	return s.matchRepo.GetLeaderboard(limit)
+}
+
 func (s *Service) GetMove(board []string, xQueue, oQueue []int) int {
 	return GetBestMove(board, xQueue, oQueue)
 }

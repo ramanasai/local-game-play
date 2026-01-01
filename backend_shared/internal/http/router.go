@@ -28,6 +28,7 @@ func NewRouter(cfg *config.Config, userHandler *handlers.UserHandler, memHandler
 		// Public Routes
 		r.Post("/users", userHandler.Login) // This is login/create
 		r.Get("/leaderboard", memHandler.GetLeaderboard)
+		r.Get("/leaderboard/tictactoe", tttHandler.GetLeaderboard)
 		r.Post("/play", tttHandler.GetMove) // Minimax
 
 		// Protected Routes

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, Cpu, Users } from 'lucide-react';
+import { RefreshCw, Cpu, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../lib/utils';
 import { getTicTacToeMove, saveTicTacToeMatch } from '../../lib/api';
@@ -177,13 +176,8 @@ const TicTacToeGame = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center bg-background text-foreground p-4">
-            {/* Header */}
+            {/* Header (Replaced by Layout) */}
             <div className="w-full max-w-lg flex items-center justify-between mb-12">
-                <Link to="/" className="flex items-center gap-2 hover:text-primary transition-colors">
-                    <ArrowLeft size={24} />
-                    <span className="font-bold">Back</span>
-                </Link>
-
                 <div className="flex gap-2 bg-card p-1 rounded-lg border border-border">
                     <button
                         onClick={() => { setIsTwoPlayer(false); resetGame(); }}

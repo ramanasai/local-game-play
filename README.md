@@ -51,6 +51,16 @@ Frontend runs on `http://localhost:5173`.
 -   `memory-card-flip/`: (Legacy) Original Memory game source.
 -   `tictactoe-minimax/`: (Legacy) Original TicTacToe game source.
 
+## 📸 Gallery
+
+<p align="center">
+  <img src="screenshots/MainPage.png" alt="Login Screen" width="45%" />
+  <img src="screenshots/HomePage.png" alt="Arcade Grid" width="45%" />
+</p>
+<p align="center">
+  <img src="screenshots/HallOfFame.png" alt="Leaderboard" width="90%" />
+</p>
+
 ## ✨ Features
 
 -   **Shared Auth**: Create a user once to play both games.

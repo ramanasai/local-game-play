@@ -74,3 +74,15 @@ func (h *TicTacToeHandler) GetStats(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(stats)
 }
+
+func (h *TicTacToeHandler) GetLeaderboard(w http.ResponseWriter, r *http.Request) {
+	limit := 10 // Default limit, could be parsed from query param
+	leaderboard, err := h.service.GetLeaderboard(limit)
+	if err != nil {
+		http.Error(w, "Failed to get leaderboard", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(leaderboard)
+}

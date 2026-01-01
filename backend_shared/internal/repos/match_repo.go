@@ -64,3 +64,36 @@ func (r *MatchRepo) GetStatsByUser(userID string) (map[string]domain.StatsSummar
 
 	return summary, nil
 }
+
+type TTTLeaderboardEntry struct {
+	UserID   string `json:"user_id"`
+	Username string `json:"username"`
+	Wins     int    `json:"wins"`
+}
+
+func (r *MatchRepo) GetLeaderboard(limit int) ([]TTTLeaderboardEntry, error) {
+	query := `
+		SELECT m.user_id, u.username, COUNT(*) as wins
+		FROM matches m
+		JOIN users u ON m.user_id = u.id
+		WHERE m.result = 'win' AND m.difficulty = 'hard'
+		GROUP BY m.user_id
+		ORDER BY wins DESC
+		LIMIT ?
+	`
+	rows, err := r.db.Query(query, limit)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query leaderboard: %w", err)
+	}
+	defer rows.Close()
+
+	var leaderboard []TTTLeaderboardEntry
+	for rows.Next() {
+		var entry TTTLeaderboardEntry
+		if err := rows.Scan(&entry.UserID, &entry.Username, &entry.Wins); err != nil {
+			return nil, err
+		}
+		leaderboard = append(leaderboard, entry)
+	}
+	return leaderboard, nil
+}

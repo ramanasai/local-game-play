@@ -56,3 +56,7 @@ export const saveTicTacToeMatch = async (difficulty: string, result: string, mov
 export const getTicTacToeStats = async () => {
     return api<any>("/stats");
 };
+
+export const getTicTacToeLeaderboard = async (limit = 10) => {
+    return api<any[]>(`/leaderboard/tictactoe?limit=${limit}`);
+};
