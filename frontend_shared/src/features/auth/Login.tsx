@@ -43,11 +43,6 @@ const Login = () => {
                 <div className="flex items-center gap-2">
                     <span className="text-xl font-bold tracking-tight text-gray-900">LOCAL GAMES</span>
                 </div>
-                <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-800">
-                    <a href="#" className="hover:text-black hover:underline underline-offset-4">Games</a>
-                    <a href="#" className="hover:text-black hover:underline underline-offset-4">Leaderboard</a>
-                    <a href="#" className="hover:text-black hover:underline underline-offset-4">About</a>
-                </nav>
                 <div>
                     {/* Placeholder for header action if needed */}
                 </div>
