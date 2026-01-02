@@ -10,7 +10,7 @@ interface AuthState {
     user: User | null;
     token: string | null;
     isLoading: boolean;
-    login: (username: string) => Promise<void>;
+    login: (username: string, pin?: string, hint?: string) => Promise<{ status: string, user?: any }>;
     logout: () => void;
     checkAuth: () => Promise<void>;
 }
@@ -19,10 +19,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     user: null,
     token: localStorage.getItem('token'),
     isLoading: true,
-    login: async (username: string) => {
-        const { user, token } = await login(username);
-        localStorage.setItem('token', token);
-        set({ user, token });
+    login: async (username: string, pin?: string, hint?: string) => {
+        const response = await login(username, pin, hint);
+        if (response.token) {
+            localStorage.setItem('token', response.token);
+            set({ user: response.user, token: response.token });
+        }
+        return response;
     },
     logout: () => {
         localStorage.removeItem('token');

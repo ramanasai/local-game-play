@@ -15,10 +15,18 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
 }
 
 // Auth
-export const login = async (username: string) => {
-    return api<{ user: any, token: string }>("/users", {
+// Auth
+export const login = async (username: string, pin?: string, hint?: string) => {
+    return api<{ user: any, token?: string, status: string }>("/users", {
         method: "POST",
-        body: JSON.stringify({ username })
+        body: JSON.stringify({ username, pin, hint })
+    });
+};
+
+export const updatePin = async (pin: string, hint: string) => {
+    return api<{ status: string }>("/users/pin", {
+        method: "PUT",
+        body: JSON.stringify({ pin, hint })
     });
 };
 

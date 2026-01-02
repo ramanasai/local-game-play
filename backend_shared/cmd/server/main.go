@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/joho/godotenv"
 	"github.com/pressly/goose/v3"
 	"github.com/ramanasai/local-game-play/config"
 	"github.com/ramanasai/local-game-play/internal/auth"
@@ -20,6 +21,11 @@ import (
 )
 
 func main() {
+	// Load .env file if it exists
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found")
+	}
+
 	cfg := config.Load()
 
 	// Connect to DB

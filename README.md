@@ -6,10 +6,12 @@ A unified arcade platform combining **Memory Card Flip** and **Infinite Tic-Tac-
 
 1.  **Memory Card Flip**: Test your memory by matching pairs of cards against the clock. Features multiple difficulty levels and a persistent leaderboard.
 2.  **Tic-Tac-Toe (Infinite)**: A twist on the classic game. You can only have 3 pieces on the board at once; placing a 4th removes your oldest piece. Play against a Minimax AI or a friend.
+3.  **2048**: Use arrow keys to merge tiles and reach the number 2048.
+4.  **Block Blast**: A Tetris-style falling block puzzle. Clear 10x20 grid lines to score points.
 
 ## 🛠️ Tech Stack
 
--   **Backend**: Go (Golang), Chi Router, SQLite.
+-   **Backend**: Go (Golang), Chi Router, SQLite, JWT Auth.
 -   **Frontend**: React, Vite, TypeScript, Tailwind CSS v4, Framer Motion, Zustand.
 -   **Package Manager**: Bun (Frontend).
 
@@ -22,11 +24,15 @@ A unified arcade platform combining **Memory Card Flip** and **Infinite Tic-Tac-
 
 ### Installation
 
-Use the provided Makefile to install dependencies for both services:
-
-```bash
-make install
-```
+1.  Clone the repository.
+2.  Create a `.env` file in the root directory (see `.env.example`):
+    ```bash
+    JWT_SECRET=your_secure_secret
+    ```
+3.  Install dependencies:
+    ```bash
+    make install
+    ```
 
 ### Running the App
 
@@ -63,9 +69,10 @@ Frontend runs on `http://localhost:5173`.
 
 ## ✨ Features
 
--   **Shared Auth**: Create a user once to play both games.
+-   **Shared Auth**: Secure PIN-based entry with JWT sessions.
 -   **Unified Dashboard**: Select your game from a sleek, arcade-style home screen.
--   **Responsive Design**: optimized for both desktop and mobile play.
+-   **Security**: Manage your PIN and Hint directly from the dashboard settings.
+-   **Responsive Design**: Optimized for both desktop and mobile play.
 
 ## 🔒 Security
 

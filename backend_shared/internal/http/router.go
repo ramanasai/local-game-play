@@ -37,6 +37,7 @@ func NewRouter(cfg *config.Config, userHandler *handlers.UserHandler, memHandler
 		r.Group(func(r chi.Router) {
 			r.Use(auth.Handle)
 			r.Get("/me", userHandler.Me)
+			r.Put("/users/pin", userHandler.UpdatePIN)
 
 			// Memory
 			r.Post("/scores", memHandler.SubmitScore)

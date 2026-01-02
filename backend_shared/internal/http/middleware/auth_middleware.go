@@ -31,6 +31,7 @@ func (m *AuthMiddleware) Handle(next http.Handler) http.Handler {
 		}
 
 		token := parts[1]
+		// Validate JWT using service
 		user, err := m.authService.GetUserFromToken(token)
 		if err != nil {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)

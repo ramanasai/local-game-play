@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import Login from './features/auth/Login';
+import Landing from './features/landing/Landing';
 import Home from './features/home/Home';
 import MemoryGame from './features/memory/Game.tsx'; // Game component
 import TicTacToeGame from './features/tictactoe/Game.tsx';
@@ -15,8 +16,16 @@ import ScrollToTop from './components/ScrollToTop';
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuthStore();
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Loading...</div>;
-  if (!user) return <Navigate to="/login" replace />;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-[#FF6B6B] text-white font-bold">Loading...</div>;
+  if (!user) return <Navigate to="/welcome" replace />;
+  return <>{children}</>;
+};
+
+// Check if user is already logged in (for public pages)
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, isLoading } = useAuthStore();
+  if (isLoading) return null;
+  if (user) return <Navigate to="/" replace />;
   return <>{children}</>;
 };
 
@@ -33,7 +42,9 @@ function App() {
         <ScrollToTop />
         <div className="min-h-screen bg-background text-foreground font-sans antialiased">
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/welcome" element={<PublicRoute><Landing /></PublicRoute>} />
+            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+
             <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
               <Route path="/" element={<Home />} />
               <Route path="/memory" element={<MemoryGame />} />
@@ -42,6 +53,9 @@ function App() {
               <Route path="/blockblast" element={<BlockBlastGame />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Route>
+
+            {/* Catch-all redirect */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </BrowserRouter>

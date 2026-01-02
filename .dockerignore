@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+
+# Environment Variables
+.env
+.env.*
+
+# Dependencies
+**/node_modules
+**/bun.lockb
+
+# Build Artifacts
+**/dist
+**/build
+backend_shared/server
+
+# Local Data/DB
+backend_shared/data/*.db
+backend_shared/data/*.db-journal
+
+# Logs and Temps
+*.log
+tmp
+.DS_Store
+
+# IDEs
+.vscode
+.idea
+
+# Other Projects (not needed for unified build)
+tictactoe-minimax
+memory-card-flip
+
+# Security Scans
+trivy-results
+.trivy-cache
+
+# Media
+screenshots
