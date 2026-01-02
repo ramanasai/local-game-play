@@ -54,8 +54,6 @@ Frontend runs on `http://localhost:5173`.
 
 -   `backend_shared/`: The Go API server.
 -   `frontend_shared/`: The React client.
--   `memory-card-flip/`: (Legacy) Original Memory game source.
--   `tictactoe-minimax/`: (Legacy) Original TicTacToe game source.
 
 ## 📸 Gallery
 
