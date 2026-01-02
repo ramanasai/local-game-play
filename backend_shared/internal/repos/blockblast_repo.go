@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ramanasai/local-game-play/internal/domain"
+	"github.com/rs/zerolog/log"
 )
 
 type BlockBlastRepo struct {
@@ -21,6 +22,7 @@ func (r *BlockBlastRepo) SaveScore(userID string, score int) error {
 	query := `INSERT INTO scores_blockblast (id, user_id, score) VALUES (?, ?, ?)`
 	_, err := r.db.Exec(query, id, userID, score)
 	if err != nil {
+		log.Error().Err(err).Str("user_id", userID).Int("score", score).Msg("BlockBlastRepo: Failed to save score")
 		return fmt.Errorf("failed to save blockblast score: %w", err)
 	}
 	return nil
@@ -36,6 +38,7 @@ func (r *BlockBlastRepo) GetLeaderboard(limit int) ([]domain.ScoreBlockBlast, er
 	`
 	rows, err := r.db.Query(query, limit)
 	if err != nil {
+		log.Error().Err(err).Msg("BlockBlastRepo: Failed to get leaderboard")
 		return nil, fmt.Errorf("failed to get blockblast leaderboard: %w", err)
 	}
 	defer rows.Close()
@@ -44,6 +47,7 @@ func (r *BlockBlastRepo) GetLeaderboard(limit int) ([]domain.ScoreBlockBlast, er
 	for rows.Next() {
 		var s domain.ScoreBlockBlast
 		if err := rows.Scan(&s.ID, &s.UserID, &s.Score, &s.CreatedAt, &s.Username); err != nil {
+			log.Error().Err(err).Msg("BlockBlastRepo: Failed to scan score row")
 			return nil, err
 		}
 		scores = append(scores, s)

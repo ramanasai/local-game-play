@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ramanasai/local-game-play/internal/domain"
+	"github.com/rs/zerolog/log"
 )
 
 type ScoreRepo struct {
@@ -19,7 +20,11 @@ func (r *ScoreRepo) Create(userID string, moves, timeSeconds int) error {
 	id := uuid.New().String()
 	query := `INSERT INTO scores (id, user_id, moves, time_seconds) VALUES (?, ?, ?, ?)`
 	_, err := r.DB.Exec(query, id, userID, moves, timeSeconds)
-	return err
+	if err != nil {
+		log.Error().Err(err).Str("user_id", userID).Int("moves", moves).Msg("ScoreRepo: Failed to create memory score")
+		return err
+	}
+	return nil
 }
 
 func (r *ScoreRepo) GetLeaderboard(limit int) ([]domain.Score, error) {
@@ -32,6 +37,7 @@ func (r *ScoreRepo) GetLeaderboard(limit int) ([]domain.Score, error) {
 	`
 	rows, err := r.DB.Query(query, limit)
 	if err != nil {
+		log.Error().Err(err).Msg("ScoreRepo: Failed to query leaderboard")
 		return nil, err
 	}
 	defer rows.Close()
@@ -40,6 +46,7 @@ func (r *ScoreRepo) GetLeaderboard(limit int) ([]domain.Score, error) {
 	for rows.Next() {
 		var s domain.Score
 		if err := rows.Scan(&s.ID, &s.UserID, &s.Moves, &s.TimeSeconds, &s.CreatedAt, &s.Username); err != nil {
+			log.Error().Err(err).Msg("ScoreRepo: Failed to scan score row")
 			return nil, err
 		}
 		scores = append(scores, s)

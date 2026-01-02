@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/ramanasai/local-game-play/internal/domain"
 	"github.com/ramanasai/local-game-play/internal/repos"
+	"github.com/rs/zerolog/log"
 )
 
 type Service struct {
@@ -15,8 +16,11 @@ func NewService(matchRepo *repos.MatchRepo) *Service {
 }
 
 func (s *Service) SaveMatch(userID, difficulty, result string, moves int) error {
+	matchID := uuid.New().String()
+	log.Info().Str("match_id", matchID).Str("user_id", userID).Str("result", result).Msg("TicTacToe Service: Saving match")
+
 	match := &domain.Match{
-		ID:         uuid.New().String(),
+		ID:         matchID,
 		UserID:     userID,
 		Difficulty: difficulty,
 		Result:     result,
@@ -34,5 +38,6 @@ func (s *Service) GetLeaderboard(limit int) ([]repos.TTTLeaderboardEntry, error)
 }
 
 func (s *Service) GetMove(board []string, xQueue, oQueue []int) int {
+	log.Debug().Msg("TicTacToe Service: Calculating move")
 	return GetBestMove(board, xQueue, oQueue)
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ramanasai/local-game-play/internal/domain"
+	"github.com/rs/zerolog/log"
 )
 
 type Game2048Repo struct {
@@ -21,6 +22,7 @@ func (r *Game2048Repo) SaveScore(userID string, score int) error {
 	query := `INSERT INTO scores_2048 (id, user_id, score) VALUES (?, ?, ?)`
 	_, err := r.db.Exec(query, id, userID, score)
 	if err != nil {
+		log.Error().Err(err).Str("user_id", userID).Int("score", score).Msg("Game2048Repo: Failed to save score")
 		return fmt.Errorf("failed to save 2048 score: %w", err)
 	}
 	return nil
@@ -36,6 +38,7 @@ func (r *Game2048Repo) GetLeaderboard(limit int) ([]domain.Score2048, error) {
 	`
 	rows, err := r.db.Query(query, limit)
 	if err != nil {
+		log.Error().Err(err).Msg("Game2048Repo: Failed to get leaderboard")
 		return nil, fmt.Errorf("failed to get 2048 leaderboard: %w", err)
 	}
 	defer rows.Close()
@@ -44,6 +47,7 @@ func (r *Game2048Repo) GetLeaderboard(limit int) ([]domain.Score2048, error) {
 	for rows.Next() {
 		var s domain.Score2048
 		if err := rows.Scan(&s.ID, &s.UserID, &s.Score, &s.CreatedAt, &s.Username); err != nil {
+			log.Error().Err(err).Msg("Game2048Repo: Failed to scan score row")
 			return nil, err
 		}
 		scores = append(scores, s)

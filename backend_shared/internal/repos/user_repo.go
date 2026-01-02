@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ramanasai/local-game-play/internal/domain"
+	"github.com/rs/zerolog/log"
 )
 
 type UserRepo struct {
@@ -25,6 +26,7 @@ func (r *UserRepo) Create(username string) (*domain.User, error) {
 	query := `INSERT INTO users (id, username) VALUES (?, ?)`
 	_, err := r.DB.Exec(query, id, username)
 	if err != nil {
+		log.Error().Err(err).Str("username", username).Msg("UserRepo: Failed to create user")
 		return nil, err
 	}
 	return user, nil
@@ -38,6 +40,9 @@ func (r *UserRepo) GetByUsername(username string) (*domain.User, error) {
 	var pinHash, hint sql.NullString
 	err := row.Scan(&user.ID, &user.Username, &pinHash, &hint, &user.CreatedAt)
 	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Error().Err(err).Str("username", username).Msg("UserRepo: Failed to get user by username")
+		}
 		return nil, err
 	}
 	user.PinHash = pinHash.String
@@ -53,6 +58,9 @@ func (r *UserRepo) GetByID(id string) (*domain.User, error) {
 	var pinHash, hint sql.NullString
 	err := row.Scan(&user.ID, &user.Username, &pinHash, &hint, &user.CreatedAt)
 	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Error().Err(err).Str("id", id).Msg("UserRepo: Failed to get user by ID")
+		}
 		return nil, err
 	}
 	user.PinHash = pinHash.String
@@ -63,5 +71,9 @@ func (r *UserRepo) GetByID(id string) (*domain.User, error) {
 func (r *UserRepo) UpdatePIN(userID, pinHash, hint string) error {
 	query := `UPDATE users SET pin_hash = ?, hint = ? WHERE id = ?`
 	_, err := r.DB.Exec(query, pinHash, hint, userID)
-	return err
+	if err != nil {
+		log.Error().Err(err).Str("user_id", userID).Msg("UserRepo: Failed to update PIN")
+		return err
+	}
+	return nil
 }

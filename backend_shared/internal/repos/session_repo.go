@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ramanasai/local-game-play/internal/domain"
+	"github.com/rs/zerolog/log"
 )
 
 type SessionRepo struct {
@@ -28,6 +29,7 @@ func (r *SessionRepo) Create(userID string) (*domain.Session, error) {
 	query := `INSERT INTO sessions (id, token, user_id) VALUES (?, ?, ?)`
 	_, err := r.DB.Exec(query, id, token, userID)
 	if err != nil {
+		log.Error().Err(err).Str("user_id", userID).Msg("SessionRepo: Failed to create session")
 		return nil, err
 	}
 	return session, nil
@@ -40,6 +42,9 @@ func (r *SessionRepo) GetByToken(token string) (*domain.Session, error) {
 	var session domain.Session
 	err := row.Scan(&session.ID, &session.Token, &session.UserID, &session.CreatedAt)
 	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Error().Err(err).Msg("SessionRepo: Failed to get session by token")
+		}
 		return nil, err
 	}
 	return &session, nil

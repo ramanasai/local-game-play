@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/ramanasai/local-game-play/internal/games/blockblast"
+	"github.com/rs/zerolog/log"
 )
 
 type BlockBlastHandler struct {
@@ -23,11 +24,14 @@ func (h *BlockBlastHandler) SubmitScore(w http.ResponseWriter, r *http.Request) 
 		Score int `json:"score"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Warn().Err(err).Msg("Invalid SubmitBlockBlastScore request body")
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
+	log.Info().Str("user_id", userID).Int("score", req.Score).Msg("Submitting BlockBlast score")
 	if err := h.service.SubmitScore(userID, req.Score); err != nil {
+		log.Error().Err(err).Msg("Failed to save BlockBlast score")
 		http.Error(w, "Failed to save score", http.StatusInternalServerError)
 		return
 	}

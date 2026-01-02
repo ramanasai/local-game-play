@@ -12,7 +12,9 @@ import (
 func NewRouter(cfg *config.Config, userHandler *handlers.UserHandler, memHandler *handlers.MemoryHandler, tttHandler *handlers.TicTacToeHandler, game2048Handler *handlers.Game2048Handler, blockBlastHandler *handlers.BlockBlastHandler, auth *authMw.AuthMiddleware) *chi.Mux {
 	r := chi.NewRouter()
 
-	r.Use(middleware.Logger)
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(authMw.RequestLogger)
 	r.Use(middleware.Recoverer)
 
 	r.Use(cors.Handler(cors.Options{

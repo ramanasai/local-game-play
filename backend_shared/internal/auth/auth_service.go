@@ -5,6 +5,7 @@ import (
 
 	"github.com/ramanasai/local-game-play/internal/domain"
 	"github.com/ramanasai/local-game-play/internal/repos"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,11 +29,15 @@ type LoginResponse struct {
 }
 
 func (s *AuthService) Login(username string, pin string, hint string) (*LoginResponse, error) {
+	log.Debug().Str("username", username).Msg("Attempting login")
+
 	user, err := s.userRepo.GetByUsername(username)
 	if err != nil {
 		// User not found -> Create new user.
+		log.Info().Str("username", username).Msg("Creating new user")
 		user, err = s.userRepo.Create(username)
 		if err != nil {
+			log.Error().Err(err).Str("username", username).Msg("Failed to create user")
 			return nil, err
 		}
 		// If PIN provided during creation (fast track), set it now
@@ -57,6 +62,7 @@ func (s *AuthService) Login(username string, pin string, hint string) (*LoginRes
 			// Refresh user object? Not strictly needed for token gen but good for correctness
 			user.PinHash = "set" // simplified
 		} else {
+			log.Info().Str("username", username).Msg("User requires PIN setup")
 			return &LoginResponse{User: user, Status: "SET_PIN_REQUIRED"}, nil
 		}
 	}
@@ -64,6 +70,7 @@ func (s *AuthService) Login(username string, pin string, hint string) (*LoginRes
 	// PIN is supposedly set now (either existed or just set)
 	// Verify it
 	if pin == "" {
+		log.Info().Str("username", username).Msg("User missing PIN in request")
 		return &LoginResponse{User: user, Status: "PIN_REQUIRED"}, nil
 	}
 
@@ -73,6 +80,7 @@ func (s *AuthService) Login(username string, pin string, hint string) (*LoginRes
 	if user.PinHash == "" || user.PinHash == "set" {
 		u, err := s.userRepo.GetByID(user.ID)
 		if err != nil {
+			log.Error().Err(err).Str("user_id", user.ID).Msg("Failed to refetch user for PIN check")
 			return nil, err
 		}
 		user = u
@@ -80,15 +88,18 @@ func (s *AuthService) Login(username string, pin string, hint string) (*LoginRes
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PinHash), []byte(pin))
 	if err != nil {
+		log.Warn().Str("username", username).Msg("Invalid PIN attempt")
 		return nil, errors.New("invalid pin")
 	}
 
 	// Valid PIN -> Generate JWT
 	token, err := GenerateToken(user)
 	if err != nil {
+		log.Error().Err(err).Str("username", username).Msg("Token generation failed")
 		return nil, err
 	}
 
+	log.Info().Str("username", username).Msg("Login successful")
 	return &LoginResponse{User: user, Token: token, Status: "OK"}, nil
 }
 
@@ -99,9 +110,11 @@ func (s *AuthService) UpdatePIN(userID string, pin string, hint string) error {
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(pin), bcrypt.DefaultCost)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to hash PIN")
 		return err
 	}
 
+	log.Info().Str("user_id", userID).Msg("Updating/Setting PIN")
 	return s.userRepo.UpdatePIN(userID, string(hash), hint)
 }
 

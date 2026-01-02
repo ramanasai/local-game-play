@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/ramanasai/local-game-play/internal/domain"
+	"github.com/rs/zerolog/log"
 )
 
 type Claims struct {
@@ -22,6 +23,7 @@ func getSecret() []byte {
 func GenerateToken(user *domain.User) (string, error) {
 	jwtSecret := getSecret()
 	if len(jwtSecret) == 0 {
+		log.Error().Msg("JWT_SECRET not set in environment")
 		return "", errors.New("JWT_SECRET not set")
 	}
 
@@ -46,12 +48,14 @@ func ValidateToken(tokenString string) (*Claims, error) {
 
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			log.Warn().Str("alg", token.Method.Alg()).Msg("Unexpected signing method")
 			return nil, errors.New("unexpected signing method")
 		}
 		return jwtSecret, nil
 	})
 
 	if err != nil {
+		log.Debug().Err(err).Msg("Token validation failed")
 		return nil, err
 	}
 

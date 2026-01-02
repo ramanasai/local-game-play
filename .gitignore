@@ -1,3 +1,4 @@
 .trivy-cache
 backend_shared/data/local_games.db
 .env
+backend_shared/server

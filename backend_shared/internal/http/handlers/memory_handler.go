@@ -7,6 +7,7 @@ import (
 
 	"github.com/ramanasai/local-game-play/internal/domain"
 	"github.com/ramanasai/local-game-play/internal/games/memory"
+	"github.com/rs/zerolog/log"
 )
 
 type MemoryHandler struct {
@@ -27,11 +28,14 @@ func (h *MemoryHandler) SubmitScore(w http.ResponseWriter, r *http.Request) {
 
 	var req SubmitScoreRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Warn().Err(err).Msg("Invalid SubmitScore request body")
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
+	log.Info().Str("user_id", user.ID).Int("moves", req.Moves).Int("time", req.TimeSeconds).Msg("Submitting Memory game score")
 	if err := h.service.SubmitScore(user.ID, req.Moves, req.TimeSeconds); err != nil {
+		log.Error().Err(err).Msg("Failed to submit memory score")
 		http.Error(w, "Failed to submit score", http.StatusInternalServerError)
 		return
 	}
@@ -48,8 +52,10 @@ func (h *MemoryHandler) GetLeaderboard(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// log.Debug().Int("limit", limit).Msg("Fetching Memory leaderboard") // Optional
 	scores, err := h.service.GetLeaderboard(limit)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get memory leaderboard")
 		http.Error(w, "Failed to get leaderboard", http.StatusInternalServerError)
 		return
 	}

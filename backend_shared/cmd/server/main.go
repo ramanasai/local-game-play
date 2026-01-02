@@ -1,8 +1,8 @@
 package main
 
 import (
-	"log"
 	"net/http"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/pressly/goose/v3"
@@ -18,30 +18,36 @@ import (
 	"github.com/ramanasai/local-game-play/internal/http/middleware"
 	"github.com/ramanasai/local-game-play/internal/repos"
 	"github.com/ramanasai/local-game-play/migrations"
+	"github.com/ramanasai/local-game-play/pkg/logger"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
 	// Load .env file if it exists
 	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
+		log.Error().Err(err).Msg("Failed to load .env file")
 	}
+
+	// Init Logger
+	logger.Init(os.Getenv("LOG_LEVEL"))
+	log.Info().Str("log_level", os.Getenv("LOG_LEVEL")).Msg("Logger initialized")
 
 	cfg := config.Load()
 
 	// Connect to DB
 	database, err := db.Connect(cfg.DBPath)
 	if err != nil {
-		log.Fatalf("Failed to connect to DB: %v", err)
+		log.Fatal().Err(err).Msg("Failed to connect to DB")
 	}
 	defer database.Close()
 
 	// Run Migrations
 	goose.SetBaseFS(migrations.Embed)
 	if err := goose.SetDialect("sqlite3"); err != nil {
-		log.Fatalf("Failed to set goose dialect: %v", err)
+		log.Fatal().Err(err).Msg("Failed to set goose dialect")
 	}
 	if err := goose.Up(database, "."); err != nil {
-		log.Fatalf("Failed to run migrations: %v", err)
+		log.Fatal().Err(err).Msg("Failed to run migrations")
 	}
 
 	// Repositories
@@ -72,8 +78,8 @@ func main() {
 	// Router
 	r := internalHttp.NewRouter(cfg, userHandler, memHandler, tttHandler, game2048Handler, blockBlastHandler, authMw)
 
-	log.Printf("Server starting on port %s", cfg.Port)
+	log.Info().Str("port", cfg.Port).Msg("Server starting")
 	if err := http.ListenAndServe(":"+cfg.Port, r); err != nil {
-		log.Fatalf("Server failed: %v", err)
+		log.Fatal().Err(err).Msg("Server failed")
 	}
 }

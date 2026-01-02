@@ -7,6 +7,7 @@ import (
 
 	"github.com/ramanasai/local-game-play/internal/domain"
 	"github.com/ramanasai/local-game-play/internal/games/game2048"
+	"github.com/rs/zerolog/log"
 )
 
 type Game2048Handler struct {
@@ -26,11 +27,14 @@ func (h *Game2048Handler) SubmitScore(w http.ResponseWriter, r *http.Request) {
 
 	var req Submit2048ScoreRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Warn().Err(err).Msg("Invalid Submit2048Score request body")
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
+	log.Info().Str("user_id", user.ID).Int("score", req.Score).Msg("Submitting 2048 game score")
 	if err := h.service.SubmitScore(user.ID, req.Score); err != nil {
+		log.Error().Err(err).Msg("Failed to submit 2048 score")
 		http.Error(w, "Failed to submit score", http.StatusInternalServerError)
 		return
 	}
@@ -49,6 +53,7 @@ func (h *Game2048Handler) GetLeaderboard(w http.ResponseWriter, r *http.Request)
 
 	scores, err := h.service.GetLeaderboard(limit)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get 2048 leaderboard")
 		http.Error(w, "Failed to get leaderboard", http.StatusInternalServerError)
 		return
 	}

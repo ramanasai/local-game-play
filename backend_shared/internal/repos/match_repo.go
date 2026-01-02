@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/ramanasai/local-game-play/internal/domain"
+	"github.com/rs/zerolog/log"
 )
 
 type MatchRepo struct {
@@ -19,6 +20,7 @@ func (r *MatchRepo) Create(match *domain.Match) error {
 	query := `INSERT INTO matches (id, user_id, difficulty, result, moves) VALUES (?, ?, ?, ?, ?)`
 	_, err := r.db.Exec(query, match.ID, match.UserID, match.Difficulty, match.Result, match.Moves)
 	if err != nil {
+		log.Error().Err(err).Str("match_id", match.ID).Msg("MatchRepo: Failed to create match")
 		return fmt.Errorf("failed to create match: %w", err)
 	}
 	return nil
@@ -33,6 +35,7 @@ func (r *MatchRepo) GetStatsByUser(userID string) (map[string]domain.StatsSummar
 	`
 	rows, err := r.db.Query(query, userID)
 	if err != nil {
+		log.Error().Err(err).Str("user_id", userID).Msg("MatchRepo: Failed to query stats")
 		return nil, fmt.Errorf("failed to query stats: %w", err)
 	}
 	defer rows.Close()
@@ -47,6 +50,7 @@ func (r *MatchRepo) GetStatsByUser(userID string) (map[string]domain.StatsSummar
 		var diff, res string
 		var count int
 		if err := rows.Scan(&diff, &res, &count); err != nil {
+			log.Error().Err(err).Msg("MatchRepo: Failed to scan stats row")
 			return nil, err
 		}
 
@@ -83,6 +87,7 @@ func (r *MatchRepo) GetLeaderboard(limit int) ([]TTTLeaderboardEntry, error) {
 	`
 	rows, err := r.db.Query(query, limit)
 	if err != nil {
+		log.Error().Err(err).Msg("MatchRepo: Failed to query leaderboard")
 		return nil, fmt.Errorf("failed to query leaderboard: %w", err)
 	}
 	defer rows.Close()
@@ -91,6 +96,7 @@ func (r *MatchRepo) GetLeaderboard(limit int) ([]TTTLeaderboardEntry, error) {
 	for rows.Next() {
 		var entry TTTLeaderboardEntry
 		if err := rows.Scan(&entry.UserID, &entry.Username, &entry.Wins); err != nil {
+			log.Error().Err(err).Msg("MatchRepo: Failed to scan leaderboard row")
 			return nil, err
 		}
 		leaderboard = append(leaderboard, entry)

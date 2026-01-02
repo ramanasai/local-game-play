@@ -3,6 +3,7 @@ package game2048
 import (
 	"github.com/ramanasai/local-game-play/internal/domain"
 	"github.com/ramanasai/local-game-play/internal/repos"
+	"github.com/rs/zerolog/log"
 )
 
 type Service struct {
@@ -16,8 +17,10 @@ func NewService(repo *repos.Game2048Repo) *Service {
 func (s *Service) SubmitScore(userID string, score int) error {
 	// Simple validation
 	if score < 0 {
+		log.Warn().Int("score", score).Msg("2048 Service: Ignoring negative score")
 		return nil // Just ignore negative scores
 	}
+	log.Debug().Str("user_id", userID).Int("score", score).Msg("2048 Service: Submitting score")
 	return s.repo.SaveScore(userID, score)
 }
 
