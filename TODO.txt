@@ -1,5 +1,4 @@
 - Pac-Man – Navigate a maze, eat all pellets, and avoid ghosts while using power pellets to temporarily turn the tables. Focuses on quick reflexes, pattern learning, and score chasing.
-- Block Blast – Drag and place blocks on a grid to complete rows or columns and clear space. Gameplay is relaxed but strategic, emphasizing planning ahead and maximizing combos.
 - Snake – Control a growing snake that moves continuously and eats food while avoiding walls and itself. Simple grid-based logic with increasing difficulty over time.
 - Flappy Bird – Tap to keep a bird airborne while passing through gaps between obstacles. Core mechanics rely on gravity, collision detection, and score tracking.
 - Breakout – Move a paddle to bounce a ball and break bricks at the top of the screen. Focuses on simple physics, collisions, and level progression.

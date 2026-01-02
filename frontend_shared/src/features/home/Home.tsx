@@ -117,6 +117,15 @@ const Home = () => {
                 <GridCell className="h-64 sm:h-auto hidden lg:flex items-center justify-center">
                     <span className="font-mono text-9xl font-black opacity-5 select-none hover:opacity-10 transition-opacity">05</span>
                 </GridCell>
+                <GridCell className="h-64 sm:h-auto hidden lg:flex items-center justify-center">
+                    <span className="font-mono text-9xl font-black opacity-5 select-none hover:opacity-10 transition-opacity">06</span>
+                </GridCell>
+                <GridCell className="h-64 sm:h-auto hidden lg:flex items-center justify-center">
+                    <span className="font-mono text-9xl font-black opacity-5 select-none hover:opacity-10 transition-opacity">07</span>
+                </GridCell>
+                <GridCell className="h-64 sm:h-auto hidden lg:flex items-center justify-center">
+                    <span className="font-mono text-9xl font-black opacity-5 select-none hover:opacity-10 transition-opacity">08</span>
+                </GridCell>
                 <div className="hidden lg:block col-span-2 border-r border-b border-border p-8">
                     <div className="h-full w-full border border-dashed border-border flex items-center justify-center">
                         <span className="font-mono text-xs uppercase text-muted-foreground tracking-widest">System Status: Online</span>
