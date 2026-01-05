@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { LogOut, Trophy, Settings } from 'lucide-react';
+import { LogOut, Trophy, Settings, Github } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
 import SettingsModal from '../features/home/SettingsModal';
 
@@ -56,8 +56,30 @@ const Layout = () => {
                 </div>
             </header>
 
+
             {/* Main Content Area */}
-            <Outlet />
+            <main className="flex-1">
+                <Outlet />
+            </main>
+
+            {/* Footer */}
+            <footer className="border-t border-white/10 bg-black/20 backdrop-blur-sm mt-auto">
+                <div className="container mx-auto max-w-7xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 text-muted-foreground">
+                    <div className="text-sm">
+                        © {new Date().getFullYear()} Local Games Arcade. Open Source.
+                    </div>
+
+                    <a
+                        href="https://github.com/ramanasai/local-game-play"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-sm hover:text-primary transition-colors group"
+                    >
+                        <Github size={18} className="group-hover:scale-110 transition-transform" />
+                        <span>View on GitHub</span>
+                    </a>
+                </div>
+            </footer>
 
             <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
         </div>

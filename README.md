@@ -86,3 +86,7 @@ To scan the source code/filesystem:
 ```bash
 make scan-fs
 ```
+
+## 🤝 Contributing
+
+Interested in contributing? Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
